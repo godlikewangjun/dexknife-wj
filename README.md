@@ -1,5 +1,6 @@
 先说说写这个插件的目的，其实就是第三方加固不方便还要钱，没有插件打包方便集成，最主要的是不知道别人怎么弄的出现bug和修改需求不方便，所以我就写了个插件，虽然是基础加固但是好过只能用混淆简单保护代码要好，最主要是自己可以随意改。当然还集成分包和多渠道打包的插件功能。
-首先感谢 packer-ng-plugin 版本1.0.8，Android-Easy-MultiDex版本1.0.1和ApkToolPlus，插件功能是在这些个插件优化而来。默认是要使用分包和多渠道打包的。这个两个配置请见链接地址。
+首先感谢 [packer-ng-plugin](https://github.com/mcxiaoke/packer-ng-plugin) 版本1.0.8，[Android-Easy-MultiDex](https://github.com/TangXiaoLv/Android-Easy-MultiDex)版本1.0.1和[ApkToolPlus](https://github.com/linchaolong/ApkToolPlus)，
+插件功能是在这些个插件优化而来。默认是要使用分包和多渠道打包的。这个两个配置请见链接地址。
 首先是用法介绍
 
 ```
@@ -71,7 +72,11 @@ apktool和jiagu.zip 下载http://download.csdn.net/detail/u010523832/9766204
 **gradlew clean apkRelease**
 **请注意要配置签名 和 普通配置没有什么不同**
 
-**github demo地址 https://github.com/godlikewangjun/dexknife-wj**
+**demo请注意修改 apktoolpath jiaguzippath 和签名 在项目里面已经加了所需的资源包请修改路径即可**
+
+####关于壳文件的制作
+myapplication项目是壳文件的项目 build之后有apk，1和ApkToolPlus反编译得到文件，按照jiagu.zip的结构即可。
+apktool.jar不用改。 项目文件可以修改加载策略和包名，其他不建议大改，如果你确实搞的定。
 
 
 
