@@ -1,0 +1,47 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "24.0.2"
+
+    defaultConfig {
+        applicationId "com.qianfandu.qianfandu"
+        minSdkVersion 15
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+    }
+    signingConfigs {
+        releaseConfig {
+            keyAlias 'chain'
+            keyPassword 'wang1994222'
+            storeFile file('D://android_work/wangjun.keystore')
+            storePassword 'wang1994222'
+
+            v2SigningEnabled false//禁用新版签名 配合packer多渠道打包
+        }
+    }
+    buildTypes {
+        release {
+            shrinkResources false;//移除无用文件
+            zipAlignEnabled true;//包优化
+            minifyEnabled true;//不加载混淆
+            debuggable false;//关闭log
+            signingConfig signingConfigs.releaseConfig
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            shrinkResources false;//移除无用文件
+            zipAlignEnabled true;//包优化
+            minifyEnabled true;//不加载混淆
+            debuggable true;//关闭log
+            signingConfig signingConfigs.releaseConfig
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    externalNativeBuild {
+        ndkBuild {
+            path 'src/main/jni/Android.mk'
+        }
+    }
+}

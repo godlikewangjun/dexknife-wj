@@ -1,0 +1,84 @@
+import java.text.SimpleDateFormat
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.library.wj:dexknife-wj:1.0.2'//分包
+    }
+}
+apply plugin: 'com.android.application'
+apply plugin: 'dexknifeWj'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "24.0.2"
+    defaultConfig {
+        applicationId "com.txjs.wj.dexknife_wj"
+        minSdkVersion 15
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        // dex突破65535的限制
+        multiDexEnabled true
+    }
+    signingConfigs {
+        releaseConfig {
+            keyAlias 'chain'
+            keyPassword 'wang1994222'
+            storeFile file('D://android_work/wangjun.keystore')
+            storePassword 'wang1994222'
+
+            v2SigningEnabled false//禁用新版签名 配合packer多渠道打包
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.releaseConfig
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+            signingConfig signingConfigs.releaseConfig
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+dexKnife {
+    //必选参数
+    enabled true //if false,禁用分包插件
+    //可选参数/
+    //1.如果没有可选参数，将根据enabled决定是否分包。
+    //2.如果有可选参数，需满足必选参数和可选参数的条件才允许分包
+
+    /*
+    *eg:当前productFlavors = dev，buildType = debug，
+    *参数组合1：enabled = true，productFlavor = dev，buildType = debug 分包
+    *参数组合2：enabled = true，productFlavor = mock，buildType = debug 不分包
+    *参数组合1：enabled = true，buildType = debug 所有buildType = debug分包
+    *参数组合1：enabled = true，productFlavor = dev 所有productFlavor = dev分包
+    * */
+    //=======================加固
+    shell true
+    packerNgShell true
+    apktoolpath 'C://android_work/android_workspace/android_studio_xs/dexknife-wj/src/apktool/apktool.jar'
+    jiaguzippath 'C:/android_work/android_workspace/android_studio_xs/dexknife-wj/src/main/java/com/wj/dexknife/shell/jiagu/jiagu.zip'
+    //=======================多渠道
+    // 指定渠道打包输出目录
+    archiveOutput = file(new File(project.buildDir.path, new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + "_apks"))
+    // 指定渠道打包输出文件名格式
+    // 默认是 `${appPkg}-${flavorName}-${buildType}-v${versionName}-${versionCode}`
+    archiveNameFormat = 'qianfandu-${flavorName}-${versionName}'
+    // 是否检查Gradle配置中的signingConfig，默认不检查
+    // checkSigningConfig = false
+    // 是否检查Gradle配置中的zipAlignEnabled，默认不检查
+    // checkZipAlign = false
+}
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:appcompat-v7:25.2.0'
+}
