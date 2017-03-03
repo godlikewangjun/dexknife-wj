@@ -1,11 +1,14 @@
+##介绍
+###插件实现了加固部分的签名校验和dex分包加载，dex加密等，其余功能是多渠道打包和自定义分包
 先说说写这个插件的目的，其实就是第三方加固不方便还要钱，没有插件打包方便集成，最主要的是不知道别人怎么弄的出现bug和修改需求不方便，所以我就写了个插件，虽然是基础加固但是好过只能用混淆简单保护代码要好，最主要是自己可以随意改。当然还集成分包和多渠道打包的插件功能。
 首先感谢 [packer-ng-plugin](https://github.com/mcxiaoke/packer-ng-plugin) 版本1.0.8，[Android-Easy-MultiDex](https://github.com/TangXiaoLv/Android-Easy-MultiDex)版本1.0.1和[ApkToolPlus](https://github.com/linchaolong/ApkToolPlus)，
 插件功能是在这些个插件优化而来。默认是要使用分包和多渠道打包的。这个两个配置请见链接地址。
 首先是用法介绍
 
+**1.0.3 去掉了多余加固**
 ```
 dependencies {
-   classpath 'com.library.wj:dexknife-wj:1.0.2'//分包
+   classpath 'com.library.wj:dexknife-wj:1.0.3'//分包
 }
 ```
 

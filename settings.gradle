@@ -1,1 +1,1 @@
-include ':app',':myapplication'
+include ':app', ':myapplication', ':dexknife-wj'

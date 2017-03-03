@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dexknife-wj/dexknife-wj.iml" filepath="$PROJECT_DIR$/dexknife-wj/dexknife-wj.iml" />
       <module fileurl="file://$PROJECT_DIR$/dexknife-wj2.iml" filepath="$PROJECT_DIR$/dexknife-wj2.iml" />
       <module fileurl="file://$PROJECT_DIR$/myapplication/myapplication.iml" filepath="$PROJECT_DIR$/myapplication/myapplication.iml" />
     </modules>

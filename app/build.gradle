@@ -13,7 +13,7 @@ apply plugin: 'dexknifeWj'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "24.0.2"
+    buildToolsVersion '25.0.0'
     defaultConfig {
         applicationId "com.txjs.wj.dexknife_wj"
         minSdkVersion 15
