@@ -61,13 +61,13 @@ packerNgShell 是配合多渠道打包用的 就是packer-ng这个插件，默�
 application '你的壳的application 名称'
 好了上效果图
 
-没有加固之前的
+没有加固之前的  
 ![这里写图片描述](http://img.blog.csdn.net/20170228152800529?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMDUyMzgzMg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center)
-加固之后的
+加固之后的  
 ![这里写图片描述](http://img.blog.csdn.net/20170228152624571?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMDUyMzgzMg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center)
-区别在于 你只看的到壳文件 原项目的dex加密了放在asset了。动态加载了dex 和分包是一样的 只不过是解密要点时间。
-如果要自定义加壳文件请在配置文件加上 application '你的壳的application 名称'
-原理在反响好的情况下再写吧。github demo地址如果有需要请留言，要求多了话我会上传。
+区别在于 你只看的到壳文件 原项目的dex加密了放在asset了。动态加载了dex 和分包是一样的 只不过是解密要点时间。  
+如果要自定义加壳文件请在配置文件加上 application '你的壳的application 名称'  
+原理在反响好的情况下再写吧。  
 apktool和jiagu.zip 下载http://download.csdn.net/detail/u010523832/9766204
 单独加固需要点击task 如图
 ![这里写图片描述](http://img.blog.csdn.net/20170228160226480?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMDUyMzgzMg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center)
@@ -78,8 +78,12 @@ apktool和jiagu.zip 下载http://download.csdn.net/detail/u010523832/9766204
 **demo请注意修改 apktoolpath jiaguzippath 和签名 在项目里面已经加了所需的资源包请修改路径即可**
 
 ####关于壳文件的制作
-myapplication项目是壳文件的项目 build之后有apk，1和ApkToolPlus反编译得到文件，按照jiagu.zip的结构即可。
+myapplication项目是壳文件的项目 build之后有apk，用ApkToolPlus反编译得到文件，按照jiagu.zip的结构即可。
 apktool.jar不用改。 项目文件可以修改加载策略和包名，其他不建议大改，如果你确实搞的定。
+
+
+###未来的完善功能
+后面可能会写task自动将制作成壳文件，添加更完善的加固方式，请期待。。。
 
 
 

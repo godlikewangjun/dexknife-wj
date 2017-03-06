@@ -5,7 +5,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.library.wj:dexknife-wj:1.0.2'//分包
+        classpath 'com.library.wj:dexknife-wj:1.0.3'//分包
     }
 }
 apply plugin: 'com.android.application'
@@ -13,7 +13,7 @@ apply plugin: 'dexknifeWj'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.0'
+    buildToolsVersion '25.0.2'
     defaultConfig {
         applicationId "com.txjs.wj.dexknife_wj"
         minSdkVersion 15
