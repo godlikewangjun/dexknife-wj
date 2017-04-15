@@ -77,12 +77,12 @@ apktool和jiagu.zip 下载http://download.csdn.net/detail/u010523832/9766204
 
 **demo请注意修改 apktoolpath jiaguzippath 和签名 在项目里面已经加了所需的资源包请修改路径即可**
 
-####关于壳文件的制作
+**关于壳文件的制作**
 myapplication项目是壳文件的项目 build之后有apk，用ApkToolPlus反编译得到文件，按照jiagu.zip的结构即可。
 apktool.jar不用改。 项目文件可以修改加载策略和包名，其他不建议大改，如果你确实搞的定。
 
 
-###未来的完善功能
+**未来的完善功能
 后面可能会写task自动将制作成壳文件，添加更完善的加固方式，请期待。。。
 
 
