@@ -1,0 +1,46 @@
+apply plugin: 'com.jfrog.bintray'
+
+def baseUrl = 'https://github.com/godlikewangjun/Android-Easy-MultiDex'
+def usersiteUrl = baseUrl
+def usergitUrl = "${baseUrl}/BuglyBetaUploder.git"
+
+def mavenDesc = 'android multidex plugin and shell'
+def licenseIds = ['Apache-2.0']
+def useremail = '1206792489@qq.com'
+
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = "$LIBRARY_NAME" //maven 仓库中的包名
+
+    publishedGroupId = "$GROUP_ID"
+    libraryName = "$LIBRARY_NAME"
+    artifact = "$LIBRARY_NAME"//必须跟Model名一样
+
+    libraryDescription =mavenDesc
+
+    siteUrl = usersiteUrl
+    gitUrl = usergitUrl
+
+    libraryVersion = "$PUBLIC_VERSION"
+
+    developerId = "$GROUP_ID"
+    developerName ="$LIBRARY_NAME"
+    developerEmail = useremail
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = licenseIds
+}
+apply from: 'installv1.gradle'
+apply from: 'bintrayv1.gradle'
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: uri('../repo'))
+            pom.groupId = "$GROUP_ID"
+            pom.artifactId = "$LIBRARY_NAME"
+            pom.version = "$LOCAL_VERSION"
+        }
+    }
+}

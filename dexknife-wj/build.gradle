@@ -1,0 +1,46 @@
+buildscript {
+    repositories {
+//        mavenLocal()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.5'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
+    }
+}
+
+apply plugin: 'groovy'
+apply from: "bintray.gradle"//gradlew bintrayUpload  gradlew compileDebug --stacktrace
+//apply from: "local.gradle"
+
+configurations {
+    provided {
+        dependencies.all { dep ->
+            configurations.default.exclude group: dep.group, module: dep.name
+        }
+    }
+    compile.extendsFrom provided
+}
+//compile gradleApi()
+//compile localGroovy()
+dependencies {
+    //    compile group: 'com.library.wj', name: 'dexknife-wj-libs', version: '1.0.1'
+    //        compile fileTree(includes: ['*.jar'], dir: 'libs')
+    compile gradleApi()
+compile localGroovy()
+    compile 'com.library.wj:dexknife-wj-libs:1.0.2'
+    provided 'com.android.tools.build:builder:2.1.3'
+    provided 'com.android.tools.build:gradle-core:2.1.3'
+    compile 'net.lingala.zip4j:zip4j:1.3.2'
+    compile 'ant:ant:1.7.0'
+    compile 'dom4j:dom4j:20040902.021138'
+}
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+tasks.withType(Javadoc) {
+    enabled = false //禁用生成javadoc的任务
+//    options.encoding = "UTF-8"
+}
+//
+//task buildSimple(type:com.wj.dexknife.BuildSimpleApkTask)

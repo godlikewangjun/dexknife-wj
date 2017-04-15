@@ -1,0 +1,92 @@
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
+//gradlew bintrayUpload
+group = "${GROUP_ID}"
+version = "${PUBLIC_VERSION}"
+
+def baseUrl = 'https://github.com/godlikewangjun/Android-Easy-MultiDex'
+def usersiteUrl = baseUrl
+def usergitUrl = "${baseUrl}/BuglyBetaUploder.git"
+def userissueUrl = "${baseUrl}/BuglyBetaUploder/issues"
+
+def projectName = "${LIBRARY_NAME}"
+def mavenDesc = 'android multidex plugin and shell'
+def licenseIds = ['Apache-2.0']
+def useremail = '1206792489@qq.com'
+
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom.project {
+            // packaging 'jar'
+            // Add your description here
+            name = 'android multidex plugin and shell'
+            url usersiteUrl
+            // Set your license
+            licenses {
+                license {
+                    name = 'The Apache Software License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                }
+            }
+            developers {
+                developer {
+                    id 'com.library.wj'
+                    name 'wangjun'
+                    email useremail
+                }
+            }
+            scm {
+                connection usergitUrl
+                developerConnection usergitUrl
+                url usersiteUrl
+            }
+        }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from 'src/main/groovy'
+    exclude 'META-INF'
+    classifier = 'sources'
+}
+
+groovydoc {
+    includePrivate = true
+    source = 'src/main/groovy'
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+
+    publish = true
+    configurations = ['archives']
+
+    pkg {
+        repo = 'wjAndBase'
+        name = projectName
+        desc = mavenDesc
+        websiteUrl = usersiteUrl
+        issueTrackerUrl = userissueUrl
+        vcsUrl = usergitUrl
+//        labels = ['gradle', 'com.tencent.bugly.plugin', 'betauploader']
+        licenses = licenseIds
+        publish = true
+        publicDownloadNumbers = true
+    }
+}
