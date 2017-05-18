@@ -6,6 +6,7 @@
 首先是用法介绍
 
 **1.0.3 去掉了多余加固 兼容gradle3.3**
+**jiagu.zip使用dexknife-wj2\dexknife-wj\src\main\java\com\wj\dexknife\shell\jiagu 项目下的 外面的可能上传时传错了**
 ```
 dependencies {
    classpath 'com.library.wj:dexknife-wj:1.0.3'//分包
