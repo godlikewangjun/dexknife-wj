@@ -58,7 +58,6 @@ public class UpdateJiaGuTask extends Task {
             Debug.e("build.xml is not exists!!!");
             return;
         }
-
         Debug.d("build project..");
         if(OS.isWindows()){
             Cmd.exec("ant.bat compile -f " + buildFile.getAbsolutePath());

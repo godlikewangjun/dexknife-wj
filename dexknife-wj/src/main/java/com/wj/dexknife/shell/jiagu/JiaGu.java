@@ -5,6 +5,10 @@ import com.wj.dexknife.shell.AppManager;
 import com.wj.dexknife.shell.Callback;
 import com.wj.dexknife.shell.apkparser.ApkParser;
 import com.wj.dexknife.shell.apkparser.bean.CertificateMeta;
+import com.wj.dexknife.shell.res.ApkDecoder;
+import com.wj.dexknife.shell.res.Configuration;
+import com.wj.dexknife.shell.res.util.FileOperation;
+import com.wj.dexknife.shell.res.util.TypedValue;
 import com.wj.dexknife.shell.utils.ClassHelper;
 import com.wj.dexknife.shell.utils.DataProtector;
 import com.wj.dexknife.shell.utils.Debug;
@@ -21,11 +25,19 @@ import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
+import org.xml.sax.SAXException;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import brut.androlib.AndrolibException;
+import brut.directory.DirectoryException;
 
 public class JiaGu {
 
@@ -37,11 +49,17 @@ public class JiaGu {
 
     private static String PROXY_APPLICATION_NAME = "com.qianfandu.ProxyApplication";
     private static final String METADATA_SRC_APPLICATION = "apktoolplus_jiagu_app";
-    public static boolean ISSHELL=false;
+    public static boolean ISSHELL=false;//是否开启加固
+    public static boolean ANDRESGUARD=false;//是否开启资源混淆
     public static String SHELLAPKNAME;
 
+    //加固文件工作文件夹
     private static File workDir = new File(AppManager.getTempDir(), "jiagu");
+    private static File andResGuardFile = null;
     private static File jiaguZip = new File(workDir, JIAGU_ZIP);
+    //资源混淆的配置文件
+    public static String andres_pz="";//配置
+    public static String andres_map="";//map路径
 
     public enum Event {
         DECOMPILEING,
@@ -58,13 +76,19 @@ public class JiaGu {
         return ZipHelper.hasFile(apk, "assets/" + JIAGU_DATA_BIN);
     }
 
+    /**
+     * 开始加固
+     * @param apk
+     * @param config
+     * @param callback
+     * @return
+     */
     public static File encrypt(File apk,KeystoreConfig config,Callback<Event> callback) {
 
         if (!FileHelper.exists(apk) || isEncrypted(apk)) {
             return null;
         }
         workDir.mkdir();
-
         // 1.decompile apk
         handleCallback(callback, Event.DECOMPILEING);
         File decompile = new File(workDir, "decompile");
@@ -80,6 +104,7 @@ public class JiaGu {
         if (!decompileResult) {
             return null;
         }
+
         handleCallback(callback, Event.ENCRYPTING);
 
         if (!encryptDex(apk, decompile)) {
@@ -91,6 +116,7 @@ public class JiaGu {
             handleCallback(callback, Event.ENCRYPT_FAIL);
             return null;
         }
+        //拷贝 r文件到 res
 
         signatureProtect(apk, decompile);
 
@@ -101,12 +127,12 @@ public class JiaGu {
 
         // 3.recompile apk
         handleCallback(callback, Event.RECOMPILING);
-        String shellNanme=FileHelper.getNoSuffixName(apk) +"_encrypted.apk";
-        if(ISSHELL==true && SHELLAPKNAME==null){
-            shellNanme=apk.getName();
+        String shellNanme = FileHelper.getNoSuffixName(apk) + "_encrypted.apk";
+        if (ISSHELL == true && SHELLAPKNAME != null && SHELLAPKNAME.length() > 0) {
+            shellNanme = FileHelper.getNoSuffixName(apk) + "_" + SHELLAPKNAME + ".apk";
         }
-        File encryptedApk = new File(apk.getParentFile(),shellNanme);
-        boolean recompileResult =ApkToolPlus.recompile(decompile, encryptedApk, new Callback<Exception>() {
+        File encryptedApk = new File(apk.getParentFile(), shellNanme);
+        boolean recompileResult = ApkToolPlus.recompile(decompile, encryptedApk, new Callback<Exception>() {
             @Override
             public void callback(Exception e) {
                 handleCallback(callback, Event.RECOMPILE_FAIL);
@@ -115,27 +141,147 @@ public class JiaGu {
         if (!recompileResult) {
             return null;
         }
+        ///资源混淆
+        if(ANDRESGUARD){
+            System.out.println("资源混淆");
+            if(!new File(andres_pz).exists()){
+                System.err.println("请添加资源混淆文件andresguard.xml，具体见说明");
+            }else if(!new File(andres_map).exists()){
+                System.err.println("请添加资源混淆文件resource_mapping.txt，具体见说明");
+            }else{
+                andResGuard(encryptedApk,config);
+            }
+        }
 
         // 4.sign apk
         if (config != null) {
             handleCallback(callback, Event.SIGNING);
             File signedApk = ApkToolPlus.signApk(encryptedApk, config);
             //FileHelper.cleanDirectory(decompile);
-            System.out.println("加固apk完成地址:"+encryptedApk.getAbsolutePath());
+            if (ISSHELL == true && (SHELLAPKNAME == null || SHELLAPKNAME.length() < 1)) {
+                apk.deleteOnExit();
+                FileHelper.copy(signedApk,new File(apk.getAbsolutePath()));
+                signedApk.deleteOnExit();
+                System.out.println("=======加固apk完成地址:" + apk.getAbsolutePath());
+            } else {
+                System.out.println("=======加固apk完成地址:" + signedApk.getAbsolutePath());
+            }
+
             return signedApk;
         }
 
-        //FileHelper.cleanDirectory(decompile);
+        FileHelper.cleanDirectory(decompile);
         return encryptedApk;
     }
 
+    /**
+     * 资源混淆
+     * @param apkFile
+     */
+    private static void andResGuard(File apkFile,KeystoreConfig config){
+        andResGuardFile=new File(workDir+"\\AndResGuard");
+        if(!andResGuardFile.exists()){
+            andResGuardFile.mkdir();
+        }
+        //资源混淆
+        try {
+            Configuration configuration=new Configuration(new File(andres_pz),new File(andres_map),new File(config.keystorePath),config.keystorePassword,config.alias,config.aliasPassword);
+            ApkDecoder apkDecoder=new ApkDecoder(configuration);
+            apkDecoder.setApkFile(apkFile);
+            apkDecoder.setOutDir(andResGuardFile);
+            apkDecoder.decode();
+
+            generalUnsignApk(apkDecoder.getCompressData(),apkDecoder.getOutDir(),apkFile,apkDecoder.getConfig());
+        } catch (AndrolibException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (DirectoryException e) {
+            e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 生成apk文件
+     * @param compressData
+     * @param mOutDir
+     * @param apk
+     * @param config
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    private static void generalUnsignApk(HashMap<String, Integer> compressData,File mOutDir,File apk,Configuration config) throws IOException, InterruptedException {
+        File tempOutDir = new File(mOutDir.getAbsolutePath(), TypedValue.UNZIP_FILE_PATH);
+        if (!tempOutDir.exists()) {
+            System.err.printf("Missing apk unzip files, path=%s\n", tempOutDir.getAbsolutePath());
+            System.exit(-1);
+        }
+
+        File[] unzipFiles = tempOutDir.listFiles();
+        List<File> collectFiles = new ArrayList<>();
+        for (File f : unzipFiles) {
+            String name = f.getName();
+            if (name.equals("res") || name.equals(config.mMetaName) || name.equals("resources.arsc")) {
+                continue;
+            }
+            collectFiles.add(f);
+        }
+
+        File destResDir = new File(mOutDir.getAbsolutePath(), "res");
+        //添加修改后的res文件
+        if (!config.mKeepRoot && FileOperation.getlist(destResDir) == 0) {
+            destResDir = new File(mOutDir.getAbsolutePath(), TypedValue.RES_FILE_PATH);
+        }
+
+        /**
+         * NOTE:文件数量应该是一样的，如果不一样肯定有问题
+         */
+        File rawResDir = new File(tempOutDir.getAbsolutePath() + File.separator + "res");
+        System.out.printf("DestResDir %d rawResDir %d\n", FileOperation.getlist(destResDir), FileOperation.getlist(rawResDir));
+        if (FileOperation.getlist(destResDir) != FileOperation.getlist(rawResDir)) {
+            throw new IOException(String.format(
+                    "the file count of %s, and the file count of %s is not equal, there must be some problem\n",
+                    rawResDir.getAbsolutePath(), destResDir.getAbsolutePath()));
+        }
+        if (!destResDir.exists()) {
+            System.err.printf("Missing res files, path=%s\n", destResDir.getAbsolutePath());
+            System.exit(-1);
+        }
+        //这个需要检查混淆前混淆后，两个res的文件数量是否相等
+        collectFiles.add(destResDir);
+        File rawARSCFile = new File(mOutDir.getAbsolutePath() + File.separator + "resources.arsc");
+        if (!rawARSCFile.exists()) {
+            System.err.printf("Missing resources.arsc files, path=%s\n", rawARSCFile.getAbsolutePath());
+            System.exit(-1);
+        }
+        collectFiles.add(rawARSCFile);
+//        apk.delete();//删除临时文件
+        FileOperation.zipFiles(collectFiles,apk , compressData);
+
+        if (!apk.exists()) {
+            throw new IOException(String.format(
+                    "can not found the unsign apk file path=%s",
+                    apk.getAbsolutePath()));
+        }
+    }
+    /**
+     * 获取签名存入
+     * @param apk
+     * @param decompile
+     */
     private static void signatureProtect(File apk, File decompile) {
-        try(ApkParser parser = new ApkParser(apk)){
+        try (ApkParser parser = new ApkParser(apk)) {
             List<CertificateMeta> certList = parser.getCertificateMetaList();
             String certMD5 = certList.get(0).getCertMd5();
             byte[] encryptData = DataProtector.encryptXXTEA(certMD5.getBytes());
-            FileUtils.writeByteArrayToFile(new File(decompile,"assets/sign.bin"), encryptData);
-        }catch (Exception e){
+            FileUtils.writeByteArrayToFile(new File(decompile, "assets/sign.bin"), encryptData);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -167,7 +313,7 @@ public class JiaGu {
             OutputFormat format = OutputFormat.createPrettyPrint();
             // OutputFormat format = OutputFormat.createCompactFormat();
             format.setEncoding("UTF-8");
-            writer = new XMLWriter(new FileOutputStream(menifest),format);
+            writer = new XMLWriter(new FileOutputStream(menifest), format);
             writer.write(document);
             writer.close();
             return true;
@@ -185,18 +331,17 @@ public class JiaGu {
 
     private static boolean jiagu(File decompileDir) {
         if (!jiaguZip.exists()) {
-            if(!JIAGU_ZIP_PATH.contains(":")){
-                System.out.println(JIAGU_ZIP_PATH+"============"+jiaguZip.getAbsolutePath());
+            if (!JIAGU_ZIP_PATH.contains(":")) {
                 if (!ClassHelper.releaseResourceToFile(JIAGU_ZIP_PATH, jiaguZip)) {
                     return false;
                 }
-            }else{
-                if(!FileHelper.copy(new File(JIAGU_ZIP_PATH),jiaguZip)){
+            } else {
+                if (!FileHelper.copy(new File(JIAGU_ZIP_PATH), jiaguZip)) {
                     return false;
                 }
             }
         }
-        if(FileHelper.exists(jiaguZip)){
+        if (FileHelper.exists(jiaguZip)) {
             jiaguZip.deleteOnExit();
         }
 

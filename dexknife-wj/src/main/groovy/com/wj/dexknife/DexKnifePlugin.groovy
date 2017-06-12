@@ -25,13 +25,17 @@ import com.wj.packerng.PackerNgPlugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.ProjectConfigurationException
+
 /**
  * the spilt tools plugin.
  */
 public class DexKnifePlugin implements Plugin<Project> {
     static final String PLUGIN_NAME = "dexKnife"
+    static final String andres_pz = "andreshuard.xml"
+    static final String andres_map = "resource_mapping.txt"
     Project project
     DexKnifeExtension dexKnifeExtension
+    String taskGroup="wjShell"//分组名称
 
     @Override
     void apply(Project project) {
@@ -41,8 +45,9 @@ public class DexKnifePlugin implements Plugin<Project> {
         }
         project.configurations.create(PLUGIN_NAME).extendsFrom(project.configurations.compile)
         dexKnifeExtension = project.extensions.create(PLUGIN_NAME, DexKnifeExtension,project)
+
         //多渠道打包初始化
-       new PackerNgPlugin(project,dexKnifeExtension)
+        new PackerNgPlugin(project,dexKnifeExtension)
 
         project.afterEvaluate {
             boolean hasApp = project.plugins.hasPlugin("com.android.application")
@@ -89,31 +94,39 @@ public class DexKnifePlugin implements Plugin<Project> {
             //加固task 单独加固
             project.android.applicationVariants.all { BaseVariant variant ->
                 if(dexKnifeExtension.shell){
-                    JiaGu.ISSHELL=true
-                    println "开始加固==========================";
                     def File inputFile = variant.outputs[0].outputFile
+                    if (inputFile==null || !inputFile.exists()){//不存在文件就直接退出
+                        return
+                    }
 
-                    AppManager.APKTOOLJARPATH=dexKnifeExtension.apktoolpath;//apktool地址
-                    JiaGu.JIAGU_ZIP_PATH=dexKnifeExtension.jiaguzippath;
+                    JiaGu.ISSHELL=true
+
+                    AppManager.APKTOOLJARPATH=dexKnifeExtension.apktoolpath//apktool地址
+                    JiaGu.JIAGU_ZIP_PATH=dexKnifeExtension.jiaguzippath
+                    JiaGu.SHELLAPKNAME=dexKnifeExtension.shellname
+                    //资源混淆
+                    JiaGu.ANDRESGUARD=dexKnifeExtension.andresguard
+                    JiaGu.andres_pz=project.file(andres_pz)
+                    JiaGu.andres_map=project.file(andres_map)
+
                     if(!dexKnifeExtension.application.isEmpty()){
                         JiaGu.PROXY_APPLICATION_NAME=dexKnifeExtension.application//初始化
                     }
-                    println "没有加固的apk地址:"+inputFile.absolutePath
 
                     def archiveTask = project.task("apkshell${variant.name.capitalize()}",
                             type: ShellOutputApkTask) {
                         taskKeystoreConfig=getSigningConfig(variant)
                         taskInputFile=inputFile
                     }
+                    archiveTask.group=taskGroup
                     def buildTypeName = variant.buildType.name
-                    if (variant.name != buildTypeName) {
+                    if (variant.name == buildTypeName) {
                         def taskName = "apkshell${buildTypeName.capitalize()}"
                         def task = project.tasks.findByName(taskName)
                         if (task == null) {
-                            task = project.task(taskName, dependsOn: archiveTask)
+                            project.task(archiveTask, dependsOn: archiveTask)
                         }
                     }
-                    println "完成加固==========================";
                 }
             }
         }

@@ -19,14 +19,15 @@ public class UpdateJiaGu {
 //
 //        task.execute();
         KeystoreConfig keystoreConfig=new KeystoreConfig();
-        keystoreConfig.keystorePassword="wang1994222";
-        keystoreConfig.aliasPassword="wang1994222";
-        keystoreConfig.alias="chain";
-        keystoreConfig.keystorePath="D://android_work/wangjun.keystore";
+        keystoreConfig.keystorePassword="123456";
+        keystoreConfig.aliasPassword="123456";
+        keystoreConfig.alias="test";
+        keystoreConfig.keystorePath="D:\\wangjun\\github\\dexknife-wj2\\test.jks";
         JiaGu.ISSHELL=true;
-        AppManager.APKTOOLJARPATH="C://android_work/android_workspace/android_studio_xs/dexknife-wj/src/apktool/apktool.jar";
-        JiaGu.JIAGU_ZIP_PATH="C:/android_work/android_workspace/android_studio_xs/dexknife-wj/src/main/java/com/wj/dexknife/shell/jiagu/jiagu.zip";
-        encryptApk(new File("C:\\android_work\\android_workspace\\android_studio_xs\\qianfandu\\build\\outputs\\apk\\qianfandu-web-4.5.0.apk"),keystoreConfig);//地址
+        JiaGu.SHELLAPKNAME="";
+        AppManager.APKTOOLJARPATH="D://wangjun/github/dexknife-wj2/apktool.jar";
+        JiaGu.JIAGU_ZIP_PATH="D://wangjun/github/dexknife-wj2/jiagu.zip";
+        encryptApk(new File("D:\\wangjun\\github\\dexknife-wj2\\app\\build\\outputs\\apk\\app-debug.apk"),keystoreConfig);//地址
     }
     public static File encryptApk(File apk, KeystoreConfig keystoreConfig){
 

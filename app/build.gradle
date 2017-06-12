@@ -3,9 +3,13 @@ import java.text.SimpleDateFormat
 buildscript {
     repositories {
         jcenter()
+        maven {
+            url '../repo'
+        }
     }
     dependencies {
-        classpath 'com.library.wj:dexknife-wj:1.0.3'//分包
+        classpath 'com.library.wj:dexknife-wj:1.1.0'//分包
+//        classpath 'com.library.wj:dexknife-wj:0.0.6'//分包
     }
 }
 apply plugin: 'com.android.application'
@@ -13,7 +17,7 @@ apply plugin: 'dexknifeWj'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.2'
+    buildToolsVersion '25.0.3'
     defaultConfig {
         applicationId "com.txjs.wj.dexknife_wj"
         minSdkVersion 15
@@ -27,10 +31,10 @@ android {
     }
     signingConfigs {
         releaseConfig {
-            keyAlias 'chain'
-            keyPassword 'wang1994222'
-            storeFile file('D://android_work/wangjun.keystore')
-            storePassword 'wang1994222'
+            keyAlias 'test'
+            keyPassword '123456'
+            storeFile file('../test.jks')
+            storePassword '123456'
 
             v2SigningEnabled false//禁用新版签名 配合packer多渠道打包
         }
@@ -65,8 +69,10 @@ dexKnife {
     //=======================加固
     shell true
     packerNgShell true
-    apktoolpath 'C://android_work/android_workspace/android_studio_xs/dexknife-wj/src/apktool/apktool.jar'
-    jiaguzippath 'C:/android_work/android_workspace/android_studio_xs/dexknife-wj/src/main/java/com/wj/dexknife/shell/jiagu/jiagu.zip'
+    andresguard true//是否开启资源混淆
+    apktoolpath 'D:\\wangjun\\github\\dexknife-wj2\\apktool.jar'
+    jiaguzippath 'D:\\wangjun\\github\\dexknife-wj2\\jiagu.zip'
+    shellname ''
     //=======================多渠道
     // 指定渠道打包输出目录
     archiveOutput = file(new File(project.buildDir.path, new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + "_apks"))
@@ -80,5 +86,5 @@ dexKnife {
 }
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:25.2.0'
+    compile 'com.android.support:appcompat-v7:25.3.1'
 }

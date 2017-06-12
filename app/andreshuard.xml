@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resproguard>
+    <issue id="property">
+        <!--whether use 7zip to repackage the signed apk, you must install the 7z command line version in window -->
+        <!--sudo apt-get install p7zip-full in linux -->
+        <!--and you must write the sign data fist, and i found that if we use linux, we can get a better result -->
+        <seventzip value="false"/>
+        <!--the sign data file name in your apk, default must be META-INF-->
+        <!--generally, you do not need to change it if you dont change the meta file name in your apk-->
+        <metaname value="META-INF"/>
+        <!--if keep root, res/drawable will be kept, it won't be changed to such as r/s-->
+        <keeproot value="false"/>
+    </issue>
+
+    <issue id="whitelist" isactive="true">
+        <path value="com.txjs.wj.dexknife_wj.R.string.umeng*" />
+        <path value="com.txjs.wj.dexknife_wj.R.layout.umeng*" />
+        <path value="com.txjs.wj.dexknife_wj.R.drawable.umeng*" />
+        <path value="com.txjs.wj.dexknife_wj.R.anim.umeng*" />
+        <path value="com.txjs.wj.dexknife_wj.R.color.umeng*" />
+        <path value="com.txjs.wj.dexknife_wj.R.style.*UM*" />
+        <path value="com.txjs.wj.dexknife_wj.R.style.umeng*" />
+        <path value="com.txjs.wj.dexknife_wj.R.id.umeng*" />
+        <path value="com.txjs.wj.dexknife_wj.R.string.com.crashlytics.*" />
+
+        <path value="com.txjs.wj.dexknife_wj.R.mipmap.ic_launcher" />.
+        <path value="com.txjs.wj.dexknife_wj.R.drawable.ic_launcher"/>
+        <path value="com.txjs.wj.dexknife_wj.R.string.app_name" />
+        <path value="com.txjs.wj.dexknife_wj.R.style.*" />
+    </issue>
+    <issue id="compress" isactive="true">
+        <!--you must use / separation, and it support *, ?, such as *.png, *.jpg, res/drawable-hdpi/welcome_?.png-->
+        <path value="*.png"/>
+        <path value="*.jpg"/>
+        <path value="*.jpeg"/>
+        <path value="*.gif"/>
+        <path value="resources.arsc"/>
+    </issue>
+</resproguard>
+

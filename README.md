@@ -1,16 +1,25 @@
 ##介绍
 ###插件实现了加固部分的签名校验和dex分包加载，dex加密等，其余功能是多渠道打包和自定义分包
 先说说写这个插件的目的，其实就是第三方加固不方便还要钱，没有插件打包方便集成，最主要的是不知道别人怎么弄的出现bug和修改需求不方便，所以我就写了个插件，虽然是基础加固但是好过只能用混淆简单保护代码要好，最主要是自己可以随意改。当然还集成分包和多渠道打包的插件功能。
-首先感谢 [packer-ng-plugin](https://github.com/mcxiaoke/packer-ng-plugin) 版本1.0.8，[Android-Easy-MultiDex](https://github.com/TangXiaoLv/Android-Easy-MultiDex)版本1.0.1和[ApkToolPlus](https://github.com/linchaolong/ApkToolPlus)，
-插件功能是在这些个插件优化而来。默认是要使用分包和多渠道打包的。这个两个配置请见链接地址。
-首先是用法介绍
+默认是要使用分包和多渠道打包的，资源混淆在1.1.0上新加，默认不开启需要自己开启。
+**感谢**
+<br>[packer-ng-plugin](https://github.com/mcxiaoke/packer-ng-plugin) 版本1.0.8，多渠道打包<br>
+[Android-Easy-MultiDex](https://github.com/TangXiaoLv/Android-Easy-MultiDex)版本1.0.1,分包<br>
+[ApkToolPlus](https://github.com/linchaolong/ApkToolPlus)加固<br>
+[AndResguard](https://github.com/shwenzhang/AndResGuard)资源混淆<br>
+使用方法可以参见上述的项目，本插件略微有些改动。详情见说明或者demo或者源码
 
-**1.0.3 去掉了多余加固 兼容gradle3.3**
+**1.1.0 更新说明**
+<br>1.修改了单独加固方式 需要在gradle wjshell点击有对应apk的task
+<br>2.新增了shellname的修改，可以自己定义修改后的名称
+<br>3.最主要的是新加了资源混淆，主要用到了andresguard的混淆代码，需要配置文件andreshuard.xml和resource_mapping.txt，具体查看demo或者andresguard
+<br>**1.0.3 去掉了多余加固 兼容gradle3.3**
 
-[**jiagu.zip使用dexknife-wj2\dexknife-wj\src\main\java\com\wj\dexknife\shell\jiagu 项目下的 外面的可能上传时传错了**](https://github.com/godlikewangjun/dexknife-wj/issues/1)
+<br>用法介绍
+
 ```
 dependencies {
-   classpath 'com.library.wj:dexknife-wj:1.0.3'//分包
+   classpath 'com.library.wj:dexknife-wj:1.1.0'//分包
 }
 ```
 
@@ -39,6 +48,7 @@ dexKnife {
     * */
     //=======================加固
     shell true
+    andresguard true//是否开启资源混淆
     packerNgShell false
     apktoolpath 'C://android_work/android_workspace/android_studio_xs/dexknife-wj/src/apktool/apktool.jar'
     jiaguzippath 'C:/android_work/android_workspace/android_studio_xs/dexknife-wj/src/main/java/com/wj/dexknife/shell/jiagu/jiagu.zip'

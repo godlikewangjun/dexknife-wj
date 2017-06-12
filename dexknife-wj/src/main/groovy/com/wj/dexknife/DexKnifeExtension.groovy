@@ -2,6 +2,7 @@ package com.wj.dexknife
 
 import org.gradle.api.Project
 
+
 class DexKnifeExtension {
     boolean enabled = false
     boolean shell = false
@@ -12,6 +13,7 @@ class DexKnifeExtension {
     String apktoolpath=""
     String jiaguzippath=""
     String shellname=""
+    boolean andresguard=""
 
     //多渠道打包
     static final String DEFAULT_NAME_TEMPLATE = '${appPkg}-${flavorName}-${buildType}-v${versionName}-${versionCode}'
