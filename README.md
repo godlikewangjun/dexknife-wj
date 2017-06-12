@@ -79,10 +79,8 @@ application '你的壳的application 名称'
 ![这里写图片描述](http://img.blog.csdn.net/20170228152624571?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMDUyMzgzMg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center)
 区别在于 你只看的到壳文件 原项目的dex加密了放在asset了。动态加载了dex 和分包是一样的 只不过是解密要点时间。  
 如果要自定义加壳文件请在配置文件加上 application '你的壳的application 名称'  
-原理在反响好的情况下再写吧。  
-apktool和jiagu.zip 下载http://download.csdn.net/detail/u010523832/9766204
 单独加固需要点击task 如图
-![这里写图片描述](http://img.blog.csdn.net/20170228160226480?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMDUyMzgzMg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center)
+![这里写图片描述](http://img.blog.csdn.net/20170612153610175?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMDUyMzgzMg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 **多渠道打包敲命令 和packer-ng插件一样**
 **gradlew clean apkRelease**
 **请注意要配置签名 和 普通配置没有什么不同**
