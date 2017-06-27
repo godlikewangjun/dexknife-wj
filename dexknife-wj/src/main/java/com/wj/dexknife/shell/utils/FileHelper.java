@@ -88,6 +88,9 @@ public class FileHelper {
     public static boolean copyDir(File dir, File toDir) {
         return copyDir(dir,toDir,true);
     }
+    public static boolean copyDirInclude(File dir, File toDir) {
+        return copyDir(dir,toDir,false);
+    }
 
     public static boolean copyDir(File dir, File toDir, boolean includeDir) {
         try {

@@ -1688,4 +1688,5 @@ com/txjs/wj/dexknife_wj/R$mipmap.class
 com/txjs/wj/dexknife_wj/R$string.class
 com/txjs/wj/dexknife_wj/R$style.class
 com/txjs/wj/dexknife_wj/R$styleable.class
+com/txjs/wj/dexknife_wj/R$xml.class
 com/txjs/wj/dexknife_wj/R.class

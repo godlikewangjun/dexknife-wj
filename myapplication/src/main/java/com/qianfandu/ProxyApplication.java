@@ -150,6 +150,7 @@ public class ProxyApplication extends Application {
 
     @Override
     public void onCreate() {
+        super.onCreate();
         // 签名检查
         SignatureUtils.checkSign(getApplicationContext()); // 注意：不要在attachBaseContext方法中调用，因为应用上下文还没初始化完成
         if (!TextUtils.isEmpty(srcAppClassName)) {

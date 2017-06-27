@@ -1,10 +1,16 @@
 package com.wj.dexknife.shell.utils;
 
 
+import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.model.ZipParameters;
+import net.lingala.zip4j.util.Zip4jConstants;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class DataProtector {
 
@@ -32,40 +38,49 @@ public class DataProtector {
 		 return data;
 	}
 
+	/**
+	 * 加密文件
+	 * @param file
+	 * @param outFile
+	 */
 	public static void encrypt(File file, File outFile){
 		if (!FileHelper.exists(file)){
 			Debug.e("file not exists!!! : " + file.getAbsolutePath());
 			return;
 		}
-
-		FileInputStream in = null;
-		FileOutputStream out = null;
 		try {
-			in = new FileInputStream(file);
-			out = new FileOutputStream(outFile);
-			ByteArrayOutputStream byteOutput;
+//			byte[] encryptData = encryptXXTEA(byteOutput.toByteArray());
+//			out.write(encryptData);
+//			out.flush();
+			File file1=new File(file.getParent(),outFile.getName());
+			FileHelper.copy(file,file1);
+			file.delete();
+			ZipFile zipFile=new ZipFile(outFile.getAbsolutePath());
+			ZipParameters parameters = new ZipParameters();
+			parameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
+			parameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_NORMAL);
 
-			try {
-				byteOutput = new ByteArrayOutputStream();
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-				return;
-			}
-
-			byte[] buff = new byte[BUFF_SIZE];
-			int len;
-			while ((len = in.read(buff)) != -1) {
-				byteOutput.write(buff, 0, len);
-			}
-
-			byte[] encryptData = encryptXXTEA(byteOutput.toByteArray());
-			out.write(encryptData);
-
+			// Set password
+			parameters.setEncryptFiles(true);
+			parameters.setEncryptionMethod(Zip4jConstants.ENC_METHOD_AES);
+			parameters.setAesKeyStrength(Zip4jConstants.AES_STRENGTH_256);
+			parameters.setPassword("wjshell");
+			zipFile.addFile(file1,parameters);
+			file1.delete();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			IO.close(in);
-			IO.close(out);
 		}
+    }
+
+	/**
+	 * 写入临时文件
+	 *
+	 * @throws IOException
+	 */
+	private static void writeTemp(byte[] bytes, OutputStream outputStream) throws IOException {
+		byte[] dexBytes = bytes;
+		outputStream.write(dexBytes, 0, dexBytes.length);
+		outputStream.flush();
+		outputStream.close();
 	}
 }

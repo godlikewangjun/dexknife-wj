@@ -8,7 +8,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.library.wj:dexknife-wj:1.1.0'//分包
+        classpath 'com.library.wj:dexknife-wj:1.1.1'//分包
 //        classpath 'com.library.wj:dexknife-wj:0.0.6'//分包
     }
 }
@@ -51,6 +51,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    //设置so库的位置
+//    sourceSets {
+//        main {
+//            jniLibs.srcDir 'libs'
+//        }
+//    }
 }
 dexKnife {
     //必选参数

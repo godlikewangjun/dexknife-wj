@@ -22,6 +22,12 @@ JNIEXPORT jbyteArray JNICALL Java_com_qianfandu_utils_ApkToolPlus_encrypt
 JNIEXPORT jbyteArray JNICALL Java_com_qianfandu_utils_ApkToolPlus_decrypt
   (JNIEnv *, jclass, jbyteArray);
 
+/*
+ *
+ */
+JNIEXPORT jstring JNICALL Java_com_qianfandu_utils_ApkToolPlus_key
+        (JNIEnv *env, jclass clazz);
+
 #ifdef __cplusplus
 }
 #endif

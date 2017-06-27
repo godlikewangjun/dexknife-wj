@@ -19,8 +19,6 @@ import java.util.List;
 
 import sun.security.pkcs.PKCS7;
 
-//import sun.security.pkcs.PKCS7;
-
 /**
  * parser certificate info.
  * One apk may have multi certificates(certificate chain).

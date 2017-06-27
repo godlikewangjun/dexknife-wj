@@ -5,26 +5,19 @@ import com.wj.dexknife.shell.jiagu.KeystoreConfig;
 
 import java.io.File;
 
+/**
+ * 加固
+ */
 public class UpdateJiaGu {
 
     public static void main(String[] args) {
-//        UpdateJiaGuTask task = new UpdateJiaGuTask();
-//
-//        task.setProjectDir(new File("C:/android_work/android_workspace/android_studio_xs/myapplication"));
-//
-//        String packagePath = JiaGu.class.getPackage().getName().replaceAll("\\.","/");
-//        task.addOutFile(new File("dexknife-wj/src/" + packagePath + "/" + UpdateJiaGuTask.JIAGU_ZIP));
-//
-//        task.addOutFile(new File("../qianfandu/src/main"+packagePath+"/" + UpdateJiaGuTask.JIAGU_ZIP));
-//
-//        task.execute();
         KeystoreConfig keystoreConfig=new KeystoreConfig();
         keystoreConfig.keystorePassword="123456";
         keystoreConfig.aliasPassword="123456";
         keystoreConfig.alias="test";
         keystoreConfig.keystorePath="D:\\wangjun\\github\\dexknife-wj2\\test.jks";
         JiaGu.ISSHELL=true;
-        JiaGu.SHELLAPKNAME="";
+        JiaGu.SHELLAPKNAME="_";
         AppManager.APKTOOLJARPATH="D://wangjun/github/dexknife-wj2/apktool.jar";
         JiaGu.JIAGU_ZIP_PATH="D://wangjun/github/dexknife-wj2/jiagu.zip";
         encryptApk(new File("D:\\wangjun\\github\\dexknife-wj2\\app\\build\\outputs\\apk\\app-debug.apk"),keystoreConfig);//地址

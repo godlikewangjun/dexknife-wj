@@ -3,7 +3,7 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
  
 #模块名称
-LOCAL_MODULE    := apktoolplus_jiagu
+LOCAL_MODULE    := wjshell_jiagu
    
 LOCAL_C_INCLUDES := $(LOCAL_PATH)
    

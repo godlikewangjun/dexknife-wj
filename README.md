@@ -9,17 +9,23 @@
 [AndResguard](https://github.com/shwenzhang/AndResGuard)资源混淆<br>
 使用方法可以参见上述的项目，本插件略微有些改动。详情见说明或者demo或者源码
 
-**1.1.0 更新说明**
+####更新说明
+**1.1.1**
+<br>1.更新加密方式，加固之后压缩体积大幅度缩小，转移到这个版本请更新jiagu.zip。
+<br>2.添加自动打包成jiagu.zip的执行类。暂时不支持命令，请查看OutShellZip.java
+<br>3.优化部分流程
+**1.1.0**
 <br>1.修改了单独加固方式 需要在gradle wjshell点击有对应apk的task
 <br>2.新增了shellname的修改，可以自己定义修改后的名称
 <br>3.最主要的是新加了资源混淆，主要用到了andresguard的混淆代码，需要配置文件andreshuard.xml和resource_mapping.txt，具体查看demo或者andresguard
-<br>**1.0.3 去掉了多余加固 兼容gradle3.3**
+**1.0.3**
+<br>去掉了多余加固 兼容gradle3.3**
 
 <br>用法介绍
 
 ```
 dependencies {
-   classpath 'com.library.wj:dexknife-wj:1.1.0'//分包
+   classpath 'com.library.wj:dexknife-wj:1.1.1'//分包
 }
 ```
 

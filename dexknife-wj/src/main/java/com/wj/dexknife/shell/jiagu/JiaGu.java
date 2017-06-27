@@ -28,6 +28,7 @@ import org.dom4j.io.XMLWriter;
 import org.xml.sax.SAXException;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -54,7 +55,7 @@ public class JiaGu {
     public static String SHELLAPKNAME;
 
     //加固文件工作文件夹
-    private static File workDir = new File(AppManager.getTempDir(), "jiagu");
+    public static File workDir = new File(AppManager.getTempDir(), "jiagu");
     private static File andResGuardFile = null;
     private static File jiaguZip = new File(workDir, JIAGU_ZIP);
     //资源混淆的配置文件
@@ -107,17 +108,17 @@ public class JiaGu {
 
         handleCallback(callback, Event.ENCRYPTING);
 
+        //加密dex
         if (!encryptDex(apk, decompile)) {
             handleCallback(callback, Event.ENCRYPT_FAIL);
             return null;
         }
-
+        //加固转移
         if (!jiagu(decompile)) {
             handleCallback(callback, Event.ENCRYPT_FAIL);
             return null;
         }
         //拷贝 r文件到 res
-
         signatureProtect(apk, decompile);
 
         if (!updateMenifest(new File(decompile, "AndroidManifest.xml"))) {
@@ -152,16 +153,15 @@ public class JiaGu {
                 andResGuard(encryptedApk,config);
             }
         }
-
         // 4.sign apk
         if (config != null) {
             handleCallback(callback, Event.SIGNING);
             File signedApk = ApkToolPlus.signApk(encryptedApk, config);
             //FileHelper.cleanDirectory(decompile);
             if (ISSHELL == true && (SHELLAPKNAME == null || SHELLAPKNAME.length() < 1)) {
-                apk.deleteOnExit();
-                FileHelper.copy(signedApk,new File(apk.getAbsolutePath()));
-                signedApk.deleteOnExit();
+                apk.delete();
+                FileHelper.copyFile(signedApk,new File(apk.getAbsolutePath()));
+                signedApk.delete();
                 System.out.println("=======加固apk完成地址:" + apk.getAbsolutePath());
             } else {
                 System.out.println("=======加固apk完成地址:" + signedApk.getAbsolutePath());
@@ -292,6 +292,11 @@ public class JiaGu {
         }
     }
 
+    /**
+     * 更新xml
+     * @param menifest
+     * @return
+     */
     private static boolean updateMenifest(File menifest) {
         XMLWriter writer = null;
         try {
@@ -329,6 +334,11 @@ public class JiaGu {
         return false;
     }
 
+    /**
+     * 加固
+     * @param decompileDir
+     * @return
+     */
     private static boolean jiagu(File decompileDir) {
         if (!jiaguZip.exists()) {
             if (!JIAGU_ZIP_PATH.contains(":")) {
@@ -379,9 +389,13 @@ public class JiaGu {
             FileHelper.move(libs, lib);
         }
         FileHelper.delete(libs);
-
         return true;
     }
+
+    /**
+     * 删除文件
+     * @param file
+     */
     private static void deleteFile(File file) {
         if (file.exists()) {//判断文件是否存在
             if (file.isFile()) {//判断是否是文件
@@ -397,6 +411,13 @@ public class JiaGu {
             System.out.println("所删除的文件不存在");
         }
     }
+
+    /**
+     * 加密dex
+     * @param apk
+     * @param decompileDir
+     * @return
+     */
     private static boolean encryptDex(File apk, File decompileDir) {
         if(decompileDir.isDirectory()){
             String[] filenames=decompileDir.list();
@@ -432,7 +453,7 @@ public class JiaGu {
                         encryptFile.delete();
                     }
                     encryptFile.mkdirs();
-
+                    //加密
                     DataProtector.encrypt(dexFile,  new File(assets, JIAGU_DATA_BIN+"/"+"classes"+(index+1)+".dex"));
                     dexFile.delete();
                 }
@@ -441,6 +462,13 @@ public class JiaGu {
 
         return true;
     }
+
+    /**
+     * 开始加固apk
+     * @param apk
+     * @param keystoreConfig
+     * @return
+     */
     public static File encryptApk(File apk, KeystoreConfig keystoreConfig){
 
         return JiaGu.encrypt(apk, keystoreConfig, new Callback<Event>() {

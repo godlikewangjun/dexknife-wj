@@ -23,6 +23,7 @@ import java.util.Map;
 import dalvik.system.DexClassLoader;
 
 import static android.transition.Fade.IN;
+import static java.lang.System.out;
 
 /**
  * Dex文件保护工具类
@@ -120,7 +121,7 @@ public class DexProtector {
             ClassLoader appClassLoader =  ClassLoader.getSystemClassLoader();
             String pahts="";
             for (int i = 0; i < dexName.length; i++) {
-                pahts+=createEncryptDexLoader(context.getAssets().open("jiagu_data.bin/" + dexName[i]), dexName[i], appClassLoader)+":"; // 优先系统的
+                pahts+=createEncryptDexLoader(dexName[i],context.getAssets().open("jiagu_data.bin/" + dexName[i]), dexName[i], appClassLoader)+":"; // 优先系统的
             }
             // 经过优化的dex输出目录
             File odexDir = context.getDir("apktoolplus_odex", Context.MODE_PRIVATE);
@@ -202,12 +203,12 @@ public class DexProtector {
      * @param parent      父类加载器
      * @return ClassLoader
      */
-    public String createEncryptDexLoader(InputStream in, String outFileName, ClassLoader parent) {
+    public String createEncryptDexLoader(String filename,InputStream in, String outFileName, ClassLoader parent) {
 
         // 解密dex文件的File对象
         File decryptFile = new File(context.getDir("apktoolplus_dex", Context.MODE_PRIVATE), outFileName);
         // 解密dex文件
-        DexProtector.decryptDex(in, decryptFile);
+        DexProtector.decryptDex(context,filename,in, decryptFile);
 
         if (!decryptFile.exists()) {
             Log.e(TAG, "dex decrypt failure!!!");
@@ -256,7 +257,7 @@ public class DexProtector {
      * @param outFile 输出解密文件
      * @return 是否解密成功
      */
-    public static boolean decryptDex(InputStream in, File outFile) {
+    public static boolean decryptDex(Context context,String filename,InputStream in, File outFile) {
         // 加密dex文件所在目录
         File outDir = outFile.getParentFile();
 
@@ -265,33 +266,32 @@ public class DexProtector {
             outDir.mkdirs();
         }
 
-        FileOutputStream out = null;
+//        FileOutputStream out = null;
         try {
             if (outFile.exists()) {
                 outFile.delete();
             }
 
-            out = new FileOutputStream(outFile);
-            ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
+//            out = new FileOutputStream(outFile);
+//            ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
 
             // 读取加密数据
-            byte[] buff = new byte[BUFF_SIZE];
-            int len;
-            while ((len = in.read(buff)) != -1) {
-                byteOutput.write(buff, 0, len);
-            }
+//            byte[] buff = new byte[BUFF_SIZE];
+//            int len;
+//            while ((len = in.read(buff)) != -1) {
+//                byteOutput.write(buff, 0, len);
+//            }
 
             // 调用native方法解密dex文件数据
-            byte[] dexBytes = byteOutput.toByteArray();
-            byte[] decryptBuff = ApkToolPlus.decrypt(dexBytes);
-            out.write(decryptBuff, 0, decryptBuff.length);
-            out.flush();
+//            byte[] dexBytes = byteOutput.toByteArray();
+//            byte[] decryptBuff = ApkToolPlus.decrypt(dexBytes);
+            ApkToolPlus.decryptDex(context,filename,in,outFile);
+//            out.write(decryptBuff, 0, decryptBuff.length);
+//            out.flush();
             return true;
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
+        }finally {
             // 释放资源
             IO.close(in);
             IO.close(out);
@@ -299,26 +299,26 @@ public class DexProtector {
         return false;
     }
 
-    /**
-     * 解密Dex文件
-     *
-     * @param encryptFile 加密文件
-     * @param outFile     输出解密文件
-     * @return 是否解密成功
-     */
-    public static boolean decryptDex(File encryptFile, File outFile) {
-
-        if (!encryptFile.exists()) {
-            Log.e(TAG, "加密文件 '" + encryptFile.getPath() + " ''不存在");
-            return false;
-        }
-
-        try {
-            return decryptDex(new FileInputStream(encryptFile), outFile);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
+//    /**
+//     * 解密Dex文件
+//     *
+//     * @param encryptFile 加密文件
+//     * @param outFile     输出解密文件
+//     * @return 是否解密成功
+//     */
+//    public static boolean decryptDex(File encryptFile, File outFile) {
+//
+//        if (!encryptFile.exists()) {
+//            Log.e(TAG, "加密文件 '" + encryptFile.getPath() + " ''不存在");
+//            return false;
+//        }
+//
+//        try {
+//            return decryptDex(encryptFile.getName(),new FileInputStream(encryptFile), outFile);
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        return false;
+//    }
 
 }
