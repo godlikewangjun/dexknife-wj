@@ -13,7 +13,7 @@
 **1.1.1**
 <br>1.更新加密方式，加固之后压缩体积大幅度缩小，转移到这个版本请更新jiagu.zip。
 <br>2.添加自动打包成jiagu.zip的执行类。暂时不支持命令，请查看OutShellZip.java
-<br>3.优化部分流程
+<br>3.优化部分流程<br>
 **1.1.0**
 <br>1.修改了单独加固方式 需要在gradle wjshell点击有对应apk的task
 <br>2.新增了shellname的修改，可以自己定义修改后的名称
