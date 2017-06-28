@@ -13,12 +13,12 @@
 **1.1.1**
 <br>1.更新加密方式，加固之后压缩体积大幅度缩小，转移到这个版本请更新jiagu.zip。
 <br>2.添加自动打包成jiagu.zip的执行类。暂时不支持命令，请查看OutShellZip.java
-<br>3.优化部分流程<br>
-**1.1.0**
+<br>3.优化部分流程
+<br>**1.1.0**
 <br>1.修改了单独加固方式 需要在gradle wjshell点击有对应apk的task
 <br>2.新增了shellname的修改，可以自己定义修改后的名称
 <br>3.最主要的是新加了资源混淆，主要用到了andresguard的混淆代码，需要配置文件andreshuard.xml和resource_mapping.txt，具体查看demo或者andresguard
-**1.0.3**
+<br>**1.0.3**
 <br>去掉了多余加固 兼容gradle3.3**
 
 <br>用法介绍
@@ -56,6 +56,7 @@ dexKnife {
     shell true
     andresguard true//是否开启资源混淆
     packerNgShell false
+    shellname ''
     apktoolpath 'C://android_work/android_workspace/android_studio_xs/dexknife-wj/src/apktool/apktool.jar'
     jiaguzippath 'C:/android_work/android_workspace/android_studio_xs/dexknife-wj/src/main/java/com/wj/dexknife/shell/jiagu/jiagu.zip'
     //=======================多渠道
@@ -77,6 +78,8 @@ jiaguzippath 是壳的文件 只个文件后面介绍
 shell 是编译时打包
 packerNgShell 是配合多渠道打包用的 就是packer-ng这个插件，默认是集成了的
 application '你的壳的application 名称'
+andresguard true or false 是否开启混淆
+shellname '' 可填可不填 设置加固打包的名称
 好了上效果图
 
 没有加固之前的  

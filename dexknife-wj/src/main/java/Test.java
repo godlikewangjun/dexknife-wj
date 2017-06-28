@@ -42,6 +42,8 @@ public class Test {
             parameters.setEncryptFiles(true);
             parameters.setEncryptionMethod(Zip4jConstants.ENC_METHOD_AES);
             parameters.setAesKeyStrength(Zip4jConstants.AES_STRENGTH_256);
+
+
             zipFile = new ZipFile("C:\\Users\\MoreStrongW\\Desktop\\test.zip");
             zipFile.addStream(new FileInputStream(file),parameters);
             zipFile.extractFile("test.txt","C:\\Users\\MoreStrongW\\Desktop\\test");

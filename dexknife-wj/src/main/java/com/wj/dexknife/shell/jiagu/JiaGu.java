@@ -379,7 +379,7 @@ public class JiaGu {
         File libs = new File(decompileDir, "libs");
         if (isHasLib) {
             for (String platform : platforms) {
-                File libFile = new File(libs, platform + "/libapktoolplus_jiagu.so");
+                File libFile = new File(libs, platform + "/libwjshell_jiagu.so");
                 File libSOFile =new File(lib, platform + "/" + libFile.getName());
                 if (libFile.exists() &&  !libSOFile.exists()) {
                     FileHelper.move(libFile, new File(lib, platform + "/" + libFile.getName()));

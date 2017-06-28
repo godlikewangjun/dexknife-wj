@@ -8,8 +8,8 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.library.wj:dexknife-wj:1.1.1'//分包
-//        classpath 'com.library.wj:dexknife-wj:0.0.6'//分包
+//        classpath 'com.library.wj:dexknife-wj:1.1.1'//分包
+        classpath 'com.library.wj:dexknife-wj:0.0.6'//分包
     }
 }
 apply plugin: 'com.android.application'
@@ -52,11 +52,11 @@ android {
         }
     }
     //设置so库的位置
-//    sourceSets {
-//        main {
-//            jniLibs.srcDir 'libs'
-//        }
-//    }
+    sourceSets {
+        main {
+            jniLibs.srcDir 'libs'
+        }
+    }
 }
 dexKnife {
     //必选参数
