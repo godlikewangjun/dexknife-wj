@@ -261,6 +261,9 @@ public class ApkToolPlus {
         File signedApk = new File(apk.getParentFile(), FileHelper.getNoSuffixName(apk) + ".apk");
         FileHelper.delete(signedApk);
 
+//        String jdkpath=Cmd.execAndGetOutput("cmd set JAVA_HOME");
+//        System.out.println(jdkpath+"------------------");
+//        Cmd.exec("cd "+jdkpath);
         //jarsigner -digestalg SHA1 -sigalg MD5withRSA -keystore keystore·�� -storepass ���� -keypass �������� -signedjar signed_xxx.apk xxx.apk ����
         StringBuilder cmdBuilder = new StringBuilder("jarsigner -digestalg SHA1 -sigalg MD5withRSA");
         cmdBuilder.append(" -keystore ").append(config.keystorePath);

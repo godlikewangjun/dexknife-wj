@@ -80,6 +80,17 @@ packerNgShell 是配合多渠道打包用的 就是packer-ng这个插件，默�
 application '你的壳的application 名称'
 andresguard true or false 是否开启混淆
 shellname '' 可填可不填 设置加固打包的名称
+####命令打包方式
+#####1.加固(请在jdk bin 目录下执行，有好的改进请留言)
+```
+命令说明 java -jar jar路径 签名文件路径 keystorePassword aliasPassword alias 加固后缀名 apktool.jar路径 jiagu.zip路径 要加固的apk路径
+例子 java -jar D:\wangjun\github\dexknife-wj2\dexknife-wj-1.1.1.jar D:\wangjun\github\dexknife-wj2\test.jks 123456 123456 test _  D:\wangjun\github\dexknife-wj2\apktool.jar D:\wangjun\github\dexknife-wj2\jiagu.zip D:\wangjun\github\dexknife-wj2\app\build\outputs\apk\app-debug.apk
+```
+#####2.制作jiagu.zip即是壳文件
+```
+命令说明 java -cp jar路径 加壳的方法 制作壳文件工作的路径 需要制作成壳文件的apk路径 输出的文件夹  apktool路径
+例子 java -cp C:\Users\MoreStrongW\Desktop\dexknife-wj-1.1.1.jar ml.OutShellZip C:\Users\MoreStrongW\Desktop\deco D:\wangjun\github\dexknife-wj2\myapplication\build\outputs\apk\myapplication-debug.apk  C:\Users\MoreStrongW\Desktop\1213 D:\wangjun\github\dexknife-wj2\apktool.jar
+```
 好了上效果图
 
 没有加固之前的  
@@ -102,7 +113,7 @@ apktool.jar不用改。 项目文件可以修改加载策略和包名，其他�
 
 
 **未来的完善功能
-后面可能会写task自动将制作成壳文件，添加更完善的加固方式，请期待。。。
+添加更完善的加固方式，请期待。。。
 
 
 

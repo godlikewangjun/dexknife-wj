@@ -10,8 +10,8 @@ buildscript {
 }
 
 apply plugin: 'groovy'
-apply from: "bintray.gradle"//gradlew bintrayUpload  gradlew compileDebug --stacktrace
-//apply from: "local.gradle"
+//apply from: "bintray.gradle"//gradlew bintrayUpload  gradlew compileDebug --stacktrace
+apply from: "local.gradle"
 
 configurations {
     provided {

@@ -62,23 +62,29 @@ public class Cmd {
     }
 
     public static String execAndGetOutput(String cmd){
-        Runtime runtime = Runtime.getRuntime();
+        BufferedReader br = null;
         try {
-            Process proc = runtime.exec(cmd);
-            String encoding = System.getProperty("sun.jnu.encoding");
-            BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream(),encoding));
-            BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream(),encoding));
-            String temp;
-            StringBuilder output = new StringBuilder();
-            while ((temp = stdInput.readLine()) != null) {
-                output.append(temp).append('\n');
+            Process p = Runtime.getRuntime().exec(cmd);
+            br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String line = null;
+            StringBuilder sb = new StringBuilder();
+            while ((line = br.readLine()) != null) {
+                sb.append(line + "\n");
             }
-            while ((temp = stdError.readLine()) != null) {
-                output.append(temp).append('\n');
-            }
-            return output.toString();
+            System.out.println(sb.toString());
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        finally
+        {
+            if (br != null)
+            {
+                try {
+                    br.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return null;
     }
