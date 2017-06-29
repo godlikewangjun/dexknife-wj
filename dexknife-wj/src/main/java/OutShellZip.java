@@ -1,3 +1,4 @@
+import com.wj.dexknife.shell.AppManager;
 import com.wj.dexknife.shell.jiagu.JiaGu;
 
 import java.io.File;
@@ -15,6 +16,7 @@ import task.UpdateJiaGuTask;
 public class OutShellZip {
     public static void main(String[] args) {
         UpdateJiaGuTask task = new UpdateJiaGuTask();
+        AppManager.APKTOOLJARPATH="D://wangjun/github/dexknife-wj2/apktool.jar";
 
         task.setProjectDir(new File("D:\\wangjun\\github\\dexknife-wj2\\myapplication\\build\\outputs\\apk\\myapplication-debug.apk"));
 

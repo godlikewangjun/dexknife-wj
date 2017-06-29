@@ -83,8 +83,8 @@ shellname '' 可填可不填 设置加固打包的名称
 ####命令打包方式
 #####1.加固(请在jdk bin 目录下执行，有好的改进请留言)
 ```
-命令说明 java -jar jar路径 签名文件路径 keystorePassword aliasPassword alias 加固后缀名 apktool.jar路径 jiagu.zip路径 要加固的apk路径
-例子 java -jar D:\wangjun\github\dexknife-wj2\dexknife-wj-1.1.1.jar D:\wangjun\github\dexknife-wj2\test.jks 123456 123456 test _  D:\wangjun\github\dexknife-wj2\apktool.jar D:\wangjun\github\dexknife-wj2\jiagu.zip D:\wangjun\github\dexknife-wj2\app\build\outputs\apk\app-debug.apk
+命令说明 java -jar jar路径 签名文件路径 keystorePassword aliasPassword alias 加固后缀名 apktool.jar路径 jiagu.zip路径 要加固的apk路径 是否资源混淆(可以不填，不填默认是false，如果填写请填后面的剩下参数) 资源混淆白名单 resmap
+例子 java -jar D:\wangjun\github\dexknife-wj2\dexknife-wj-1.1.1.jar D:\wangjun\github\dexknife-wj2\test.jks 123456 123456 test _  D:\wangjun\github\dexknife-wj2\apktool.jar D:\wangjun\github\dexknife-wj2\jiagu.zip D:\wangjun\github\dexknife-wj2\app\build\outputs\apk\app-debug.apk true D:\wangjun\github\dexknife-wj2\app\andreshuard.xml D:\wangjun\github\dexknife-wj2\app\resource_mapping.txt
 ```
 #####2.制作jiagu.zip即是壳文件
 ```

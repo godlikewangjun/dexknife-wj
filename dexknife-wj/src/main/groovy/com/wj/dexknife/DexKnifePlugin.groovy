@@ -106,8 +106,10 @@ public class DexKnifePlugin implements Plugin<Project> {
                     JiaGu.SHELLAPKNAME=dexKnifeExtension.shellname
                     //资源混淆
                     JiaGu.ANDRESGUARD=dexKnifeExtension.andresguard
-                    JiaGu.andres_pz=project.file(andres_pz)
-                    JiaGu.andres_map=project.file(andres_map)
+                    if(JiaGu.ANDRESGUARD){
+                        JiaGu.andres_pz=project.file(andres_pz)
+                        JiaGu.andres_map=project.file(andres_map)
+                    }
 
                     if(!dexKnifeExtension.application.isEmpty()){
                         JiaGu.PROXY_APPLICATION_NAME=dexKnifeExtension.application//初始化

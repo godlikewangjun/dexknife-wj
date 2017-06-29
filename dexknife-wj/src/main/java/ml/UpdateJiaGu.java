@@ -22,13 +22,13 @@ public class UpdateJiaGu {
         JiaGu.SHELLAPKNAME=args[4];
         AppManager.APKTOOLJARPATH=args[5];
         JiaGu.JIAGU_ZIP_PATH=args[6];
-        encryptApk(new File(args[7]),keystoreConfig);//地址
-
         if(args.length>8&&args[8]!=null){//判断是否资源混淆
             JiaGu.ANDRESGUARD=Boolean.parseBoolean(args[8]);
             JiaGu.andres_pz=args[9];//配置文件
             JiaGu.andres_map=args[10];//map文件
         }
+        encryptApk(new File(args[7]),keystoreConfig);//地址
+
     }
     public static File encryptApk(File apk, KeystoreConfig keystoreConfig){
 
