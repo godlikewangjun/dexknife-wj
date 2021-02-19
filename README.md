@@ -1,6 +1,6 @@
 
-**即将开源的项目**
-https://a.app.qq.com/o/simple.jsp?pkgname=com.wj.makebai
+**即将开源的项目**<br>
+https://a.app.qq.com/o/simple.jsp?pkgname=com.wj.makebai<br>
 在另外一个仓库，可能会上传
 **个人精力有限，暂停项目升级，各个功能的支持请见链接。最后一次更新是android studio 2.3，gradle 3.x**<br>
 **介绍**<br>
