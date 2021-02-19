@@ -1,7 +1,7 @@
 
 **即将开源的项目**<br>
 https://a.app.qq.com/o/simple.jsp?pkgname=com.wj.makebai<br>
-在另外一个仓库，可能会上传
+在另外一个仓库，可能会上传<br>
 **个人精力有限，暂停项目升级，各个功能的支持请见链接。最后一次更新是android studio 2.3，gradle 3.x**<br>
 **介绍**<br>
 插件实现了加固部分的签名校验和dex分包加载，dex加密等，其余功能是多渠道打包和自定义分包
